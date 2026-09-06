@@ -30,11 +30,14 @@ Repository = "https://github.com/agnara-project/agnara-capability-basics"
 Issues = "https://github.com/agnara-project/agnara-capability-basics/issues"
 Agnara = "https://github.com/Blandskron/agnara"
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
     "pytest>=9.0.0",
     "ruff>=0.16.0",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["catalog.py", "domain.py"]
 
 [tool.ruff]
 target-version = "py314"
