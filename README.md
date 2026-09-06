@@ -2,7 +2,7 @@
 
 [![Agnara Version](https://img.shields.io/badge/agnara-0.1.0a3-blue.svg)](https://pypi.org/project/agnara/0.1.0a3/)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.14-blue.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/status-Historical%20%2F%20Frozen-lightgrey.svg)](#historical-status)
+[![Status](https://img.shields.io/badge/status-Historical%20%2F%20Frozen-lightgrey.svg)](#frozen-status)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
 > **The canonical educational entry point for developers learning the capability-first architecture of Agnara.**
@@ -10,83 +10,83 @@
 
 ---
 
-## Historical Status
+## 1. What is this Project?
 
-This repository is **Historical Reference Application #004** in the Agnara reference suite:
+`agnara-capability-basics` is a compact, production-grade pedagogical application demonstrating the core capability-first model of Agnara in isolation.
+
+In traditional software development, business operations are tightly bound to specific communication protocols: an endpoint is an HTTP route, an RPC procedure, or a chatbot tool callback. When transports evolve, developers are forced to rewrite handlers or maintain complex adapter shims.
+
+**In Agnara, a Capability is an atomic, transport-neutral business operation.** It represents pure domain intent, decoupled from HTTP, WebSockets, or AI wire formats.
+
+---
+
+## 2. What You Will Learn
+
+By exploring this repository, you will understand:
+1. **The Capability-First Model:** Why capabilities represent business operations, not endpoints or protocol bindings.
+2. **Real Declaration Ergonomics:** How to declare capabilities using `Agnara("<namespace>")` and `@app.capability` in `0.1.0a3`.
+3. **Decoupled Identity:** How to separate public capability IDs (`catalog.list_products`) from internal Python function names (`query_catalog_items`) to keep client manifests stable during refactors.
+4. **Agentic Metadata Vocabularies:** How to declare side effects (`StandardEffect`), operational risk (`Risk`), human confirmation requirements (`Confirmation`), idempotency (`Idempotency`), and authorization scopes.
+5. **Synchronous and Asynchronous Handlers:** How Agnara treats both synchronous callables and `async def` coroutines as first-class capabilities with identical declaration ergonomics.
+6. **Two-Phase Registry Lifecycle:** How `app.compile()` freezes registration (ADR 0005) into an immutable, thread-safe `FrozenCapabilityRegistry`.
+7. **Zero Decorator Distortion:** Why `@app.capability` returns the underlying function completely unwrapped, enabling native Python direct testing without framework harnesses.
+8. **Observable Error Behaviors:** How domain business exceptions and framework lifecycle errors are cleanly distinguished.
+
+---
+
+## 3. Historical Baseline & Version Pinning
 
 | Dimension | Specification |
 |---|---|
-| **Framework Release** | `agnara==0.1.0a3` (pinned PyPI release) |
-| **Python Runtime** | CPython >= 3.14 (free-threaded compatible under PEP 703) |
+| **Framework Version** | Strictly pinned to **`agnara==0.1.0a3`** |
+| **Python Runtime** | **CPython >= 3.14** (designed for lock-free free-threaded execution under PEP 703) |
 | **Repository Status** | **Historical / Frozen** |
-| **API Scope** | Strictly uses the real public API surface of 0.1.0a3; no unreleased APIs |
-| **Educational Focus** | Capability model fundamentals in isolation (no transport or DI distractions) |
-
-For autonomous AI agent operational instructions, see [AGENTS.md](AGENTS.md).
+| **Public API Scope** | Uses exclusively real public exports available in `0.1.0a3`; no speculative or post-a3 APIs |
 
 ---
 
-## What You Will Learn
+## 4. Prerequisites
 
-Most backend frameworks organize code around **transports**: HTTP routes (`@app.get`), RPC service stubs, or LLM chatbot tools. When you want to expose the same operation over REST, CLI, and an AI agent, you either rewrite logic or introduce complex adapter layers.
-
-**Agnara inverts this model by making the Capability the primary unit of software construction.**
-
-By exploring this reference application, you will learn:
-1. **What a Capability is:** An atomic, transport-neutral business operation that exists independently of HTTP, WebSockets, or AI protocols.
-2. **Clean Declaration:** How to declare capabilities using `Agnara("<namespace>")` and `@app.capability`.
-3. **Decoupled Naming:** How to separate public capability IDs (`catalog.list_products`) from internal Python function names (`query_catalog_items`) to keep client contracts stable during code refactoring.
-4. **Agentic Metadata:** How to annotate capabilities with side effects, operational risk, human confirmation requirements, idempotency, and authorization scopes.
-5. **Synchronous & Asynchronous Capabilities:** How Agnara treats both sync functions and `async def` coroutines as first-class citizens with identical declaration ergonomics.
-6. **Two-Phase Registry Lifecycle:** How `app.compile()` transitions the application from mutable setup to an immutable, thread-safe `FrozenCapabilityRegistry`.
-7. **Zero-Overhead Direct Invocation:** Why `@app.capability` returns the underlying Python function completely unwrapped, enabling direct unit testing without framework harnesses.
-8. **Observable Error Behaviors:** How Agnara cleanly separates domain business exceptions from framework lifecycle errors.
+- **Python:** CPython >= 3.14 (Free-threaded build or standard build).
+- **Shell:** PowerShell, Bash, or Zsh.
+- **Git:** Standard Git installation.
 
 ---
 
-## Quick Start (Under 2 Minutes)
+## 5. Quick Start (Under 2 Minutes)
 
-### 1. Prerequisites
-- **CPython 3.14+** installed.
-- PowerShell, Bash, or Command Prompt.
-
-### 2. Setup Environment
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/agnara-project/agnara-capability-basics.git
 cd agnara-capability-basics
 
-# Create a virtual environment using Python 3.14
+# 2. Create virtual environment with Python 3.14
 py -3.14 -m venv .venv
 
-# Activate the virtual environment
+# 3. Activate the virtual environment
 # On Windows (PowerShell):
 .\.venv\Scripts\Activate.ps1
 # On Linux/macOS:
 # source .venv/bin/activate
 
-# Install exact pinned dependencies and editable project with dev tools
+# 4. Install exact pinned dependencies and editable project with dev tools
 pip install -r requirements.txt
 pip install -e ".[dev]"
-```
 
-### 3. Run the Interactive Demonstration
-```bash
+# 5. Run the interactive demonstration
 python app.py
-```
 
-### 4. Run the Test Suite
-```bash
+# 6. Run the comprehensive test suite
 pytest -v
 ```
 
 ---
 
-## The Pedagogical Application: Product Catalog
+## 6. The Pedagogical Application
 
-The reference application implements a compact product catalog in two files:
-- **`domain.py`:** 100% pure Python domain models (`Product`, `PriceBreakdown`, `InventoryStatus`), business calculations, and domain exceptions. Zero framework imports.
-- **`catalog.py`:** Declares the Agnara application namespace and registers 4 distinct capabilities, each teaching a specific architectural lesson:
+The application implements a compact product catalog across two modules:
+- **`domain.py`:** Pure Python standard library. Zero framework imports. Contains `Product`, `PriceBreakdown`, and `InventoryStatus` dataclasses, catalog seed data, and domain calculations.
+- **`catalog.py`:** Initializes `Agnara("catalog")` and declares 4 reference capabilities:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -114,254 +114,95 @@ The reference application implements a compact product catalog in two files:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 1. Single Entity Lookup (`get_product`)
-Demonstrates implicit naming and automatic docstring extraction. When `description` is omitted, Agnara captures the first paragraph of the docstring:
+### Executing the Demonstration (`python app.py`)
 
-```python
-@app.capability(
-    scopes=["catalog:read"],
-    effects=[StandardEffect.READ],
-    risk=Risk.LOW,
-    confirmation=Confirmation.NEVER,
-    idempotent=True,
-)
-def get_product(sku: str) -> Product:
-    """Retrieve product specifications by its unique SKU identifier.
+Running `python app.py` executes the 6-stage capability lifecycle:
+1. **Declaration & Metadata:** Inspects pre-compilation application state (`app.is_compiled == False`) and lists declared metadata.
+2. **Direct Invocation:** Calls `get_product("KB-900")` and `calculate_price("LP-100", 2)` directly as raw Python functions with zero wrapper overhead.
+3. **Compilation:** Calls `app.compile()` to freeze registration into a `FrozenCapabilityRegistry` (`app.is_compiled == True`).
+4. **Registry Querying:** Filters capabilities by namespace (`in_namespace("catalog")`) and effect (`with_effect(StandardEffect.READ)`), and executes handlers via registry lookup.
+5. **Asynchronous Execution:** Runs `check_warehouse_availability` asynchronously with `asyncio.run()`.
+6. **Observable Error Behaviors:** Demonstrates expected exceptions (`ProductNotFoundError`, `InvalidQuantityError`, `UnknownCapabilityError`, `RegistryFrozenError`, `DuplicateCapabilityError`, `DefinitionError`).
 
-    Detailed internal notes below the first paragraph are ignored.
-    """
-    return find_product_by_sku(sku)
+---
+
+## 7. Key Agnara Concepts Demonstrated
+
+### Capability vs Transport
+Agnara Core owns the semantics shared by every transport: capabilities, metadata, the registry, and errors. Transports (REST HTTP, MCP, CLI) are external projections that point to capabilities.
+
+### Two-Phase Registry Lifecycle (ADR 0005)
+Registration occurs strictly during startup. Calling `app.compile()` freezes the registry, returning a `FrozenCapabilityRegistry`. Subsequent registration attempts raise `RegistryFrozenError`. Under free-threaded CPython 3.14, the frozen registry provides lock-free concurrency.
+
+### Zero-Overhead Direct Invocation
+`@app.capability` records declarations as a side effect and returns the callable completely unaltered. Handlers can be tested directly with standard assertions without framework harnesses.
+
+---
+
+## 8. Project Structure
+
 ```
-
-### 2. Collection Query with Explicit Naming (`list_products`)
-Demonstrates decoupling the public capability ID (`catalog.list_products`) from the internal implementation name (`query_catalog_items`):
-
-```python
-@app.capability(
-    name="list_products",
-    description="Filter and retrieve matching products from the catalog.",
-    scopes=["catalog:read"],
-    effects=[StandardEffect.READ],
-    risk=Risk.LOW,
-    confirmation=Confirmation.NEVER,
-    idempotent=True,
-)
-def query_catalog_items(
-    category: str | None = None,
-    max_price: float | None = None,
-) -> list[Product]:
-    return search_products(category=category, max_price=max_price)
-```
-
-### 3. Business Calculation & Structured Output (`calculate_price`)
-Capabilities are not limited to CRUD database queries; pure business logic and algorithms are first-class capabilities:
-
-```python
-@app.capability(
-    description="Calculate full order pricing including volume subtotals, discounts, and taxes.",
-    scopes=["catalog:read"],
-    effects=[StandardEffect.READ],
-    risk=Risk.LOW,
-    confirmation=Confirmation.NEVER,
-    idempotent=True,
-)
-def calculate_price(
-    sku: str,
-    quantity: int,
-    discount_code: str | None = None,
-) -> PriceBreakdown:
-    return compute_pricing(sku=sku, quantity=quantity, discount_code=discount_code)
-```
-
-### 4. Asynchronous Non-blocking Capability (`check_warehouse_availability`)
-Agnara preserves asynchronous coroutines transparently:
-
-```python
-@app.capability(
-    description="Asynchronously query real-time warehouse logistics for stock availability.",
-    scopes=["inventory:read"],
-    effects=[StandardEffect.READ],
-    risk=Risk.LOW,
-    confirmation=Confirmation.NEVER,
-    idempotent=True,
-)
-async def check_warehouse_availability(sku: str) -> InventoryStatus:
-    await asyncio.sleep(0.01)  # Non-blocking I/O simulation
-    return lookup_warehouse_inventory(sku)
+agnara-capability-basics/
+├── AGENTS.md                   # Operational manual for AI agents
+├── README.md                   # Progressive learning guide for human developers
+├── ARCHITECTURE.md             # In-depth architectural design and ADR references
+├── CONTRIBUTING.md             # GitFlow and contribution guidelines
+├── SECURITY.md                 # Security disclosure policy
+├── CHANGELOG.md                # Release ledger
+├── LICENSE                     # Apache 2.0
+├── pyproject.toml              # Packaging and dev dependencies
+├── requirements.txt            # Exact pinned core dependency (agnara==0.1.0a3)
+├── domain.py                   # Pure Python domain logic and dataclasses
+├── catalog.py                  # Agnara("catalog") setup and capability declarations
+├── app.py                      # Pedagogical 6-stage demonstration script
+├── docs/
+│   ├── capability-lifecycle.md # State machine and compilation lifecycle
+│   └── public-api-boundary.md  # Permitted exports and prohibited anti-patterns
+└── tests/
+    ├── test_capabilities.py    # Handler execution, domain rules, async behavior
+    ├── test_metadata_and_registry.py # Identity, metadata, registry query methods
+    └── test_lifecycle_and_errors.py  # Compile freeze, duplicates, invalid definitions
 ```
 
 ---
 
-## The 6-Stage Demonstration (`app.py`)
+## 9. Testing & Quality Assurance
 
-Running `python app.py` walks you through each stage of the capability lifecycle:
+Run the test suite:
+```powershell
+pytest -v
+```
 
-```text
-==============================================================================
-  Agnara Historical Reference Application #004: agnara-capability-basics
-  Target: agnara==0.1.0a3 | Python: CPython >=3.14 | Status: Historical / Frozen
-==============================================================================
-Python Version: 3.14.4
+Check code formatting and linting:
+```powershell
+ruff check .
+ruff format --check .
+```
 
-==============================================================================
-  1. DECLARATION & METADATA (Pre-Compilation State)
-==============================================================================
-Application Name (Namespace): 'catalog'
-Is Compiled? False
-Number of registered capabilities: 4
-
-Registered Capabilities:
-  - ID:           catalog.get_product
-    Description:  Retrieve product specifications by its unique SKU identifier.
-    Risk:         low
-    Effects:      ['read']
-    Scopes:       ['catalog:read']
-    Idempotency:  yes
-
-  - ID:           catalog.list_products
-    Description:  Filter and retrieve matching products from the catalog.
-    Risk:         low
-    Effects:      ['read']
-    Scopes:       ['catalog:read']
-    Idempotency:  yes
-
-  - ID:           catalog.calculate_price
-    Description:  Calculate full order pricing including volume subtotals, discounts, and taxes.
-    Risk:         low
-    Effects:      ['read']
-    Scopes:       ['catalog:read']
-    Idempotency:  yes
-
-  - ID:           catalog.check_warehouse_availability
-    Description:  Asynchronously query real-time warehouse logistics for stock availability.
-    Risk:         low
-    Effects:      ['read']
-    Scopes:       ['inventory:read']
-    Idempotency:  yes
-
-==============================================================================
-  2. DIRECT INVOCATION (Zero Decorator Distortion)
-==============================================================================
-In Agnara, '@app.capability' records the declaration but returns the function
-completely unwrapped and unchanged. Capabilities remain plain Python callables
-that can be called directly by unit tests without framework setup.
-
->> Calling catalog.get_product('KB-900') directly:
-   Result: Mechanical Keyboard Pro (SKU: KB-900) - Price: $129.99
-
->> Calling catalog.calculate_price('LP-100', quantity=2, discount_code='SUMMER20') directly:
-   Subtotal:  $2998.00
-   Discount: -$599.60 (SUMMER20)
-   Tax (19%): +$455.70
-   Total:     $2854.10
-
-==============================================================================
-  3 & 4. COMPILATION & REGISTRY QUERYING
-==============================================================================
-Calling 'app.compile()' freezes registration (ADR 0005) and yields an immutable,
-thread-safe FrozenCapabilityRegistry with deterministic ordering.
-
-Is Compiled now? True
-Registry Type:   FrozenCapabilityRegistry
-Total Entries:   4
-
->> Querying registry with namespace filter (.in_namespace('catalog')):
-   Found 4 capabilities in namespace 'catalog'
-
->> Querying registry with effect filter (.with_effect(StandardEffect.READ)):
-   Found 4 capabilities with effect 'read':
-   * catalog.get_product
-   * catalog.list_products
-   * catalog.calculate_price
-   * catalog.check_warehouse_availability
-
->> Invoking capability handler through registry lookup:
-   Filtered peripherals <= $100 via catalog.list_products:
-   - Ergonomic Wireless Mouse ($59.99)
-
-==============================================================================
-  5. ASYNCHRONOUS CAPABILITY EXECUTION
-==============================================================================
-Agnara treats asynchronous handlers as first-class citizens.
-Async capabilities are ordinary coroutines executed with standard asyncio.
-
->> Executing async capability: catalog.check_warehouse_availability
-   Direct Call Result: Available=True in 'central-hub-eu' (Stock: 45)
-   Registry Call Result (CA-010): Available=False in 'central-hub-eu' (Stock: 0)
-
-==============================================================================
-  6. OBSERVABLE ERROR BEHAVIORS
-==============================================================================
-Agnara separates domain exceptions from framework lifecycle errors.
-
->> 1. Domain Error: ProductNotFoundError
-   CAUGHT EXPECTED: ProductNotFoundError: Product with SKU 'NON-EXISTENT-SKU' not found in catalog
-
->> 2. Domain Error: InvalidQuantityError
-   CAUGHT EXPECTED: InvalidQuantityError: Quantity must be a positive integer, got: 0
-
->> 3. Domain Error: InvalidDiscountError
-   CAUGHT EXPECTED: InvalidDiscountError: Invalid or unrecognized discount code: 'INVALID_PROMO'
-
->> 4. Registry Error: UnknownCapabilityError
-   CAUGHT EXPECTED: UnknownCapabilityError: no capability registered as 'catalog.non_existent_capability'
-
->> 5. Lifecycle Error: RegistryFrozenError
-   CAUGHT EXPECTED: RegistryFrozenError: cannot register catalog.late_addition after the registry was frozen; registration belongs to startup compilation (ADR 0005)
-
->> 6. Definition Error: DuplicateCapabilityError
-   CAUGHT EXPECTED: DuplicateCapabilityError: capability isolated.entry is already registered; ids must be unique because policies, audit records and agent manifests reference them
-
->> 7. Definition Error: DefinitionError (Malformed Name)
-   CAUGHT EXPECTED: DefinitionError: invalid capability name in 'isolated.invalid-dashed-name': 'invalid-dashed-name' is not a valid Python identifier
-
-==============================================================================
-  DEMONSTRATION COMPLETED SUCCESSFULLY
-==============================================================================
+Verify package build:
+```powershell
+pip wheel . --no-deps -w dist
+Remove-Item -Recurse -Force dist
 ```
 
 ---
 
-## Architectural Foundations
+## 10. Relation to Historical Reference Applications
 
-### 1. Two-Phase Registry Lifecycle (ADR 0005)
-Agnara strictly separates the **authoring phase** from the **execution phase**:
-- **Authoring (`CapabilityRegistry`):** Mutable collection where `@app.capability` records definitions during startup.
-- **Freeze Step (`app.compile()`):** Closes registration, returning a `FrozenCapabilityRegistry`. Under free-threaded CPython 3.14 (PEP 703), the frozen registry provides lock-free read operations across multiple threads with guaranteed deterministic iteration order. Subsequent registration attempts raise `RegistryFrozenError`.
+This repository belongs to the Agnara Historical Reference Application series:
 
-### 2. The Unwrapped Callable Guarantee
-In traditional frameworks, decorators wrap functions in closures or proxies, complicating unit testing and adding overhead. In Agnara, `@app.capability` records the declaration in the registry and returns the function **completely unwrapped**:
-```python
-# You can test your function directly without any Agnara harness:
-product = get_product("KB-900")
-assert product.sku == "KB-900"
-```
-
-### 3. Agentic Metadata Ontology
-Agnara provides standardized vocabularies describing what an operation *does*:
-- **`StandardEffect`:** `READ`, `CACHE_WRITE`, `DATABASE_WRITE`, `EXTERNAL_WRITE`, `FINANCIAL_WRITE`, `DESTRUCTIVE`.
-- **`Risk`:** `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
-- **`Confirmation`:** `NEVER` (fully autonomous), `POLICY` (context-dependent), `REQUIRED` (always human-approved).
-- **`Idempotency`:** `YES` (safe to retry), `NO` (retries produce extra side effects), `UNKNOWN` (default honest tri-state).
-- **`scopes`:** Logical authorization labels (e.g. `catalog:read`, `inventory:read`).
+| App # | Designation | Pinned Release | Pedagogical Focus |
+|---|---|---|---|
+| **#001** | `agnara-starter` | `agnara==0.1.0a1` | Initial core setup & basic execution |
+| **#002** | `agnara-dependency-intelligence` | `agnara==0.1.0a2` | Dependency injection & graph resolution |
+| **#003** | `agnara-secure-operations` | `agnara==0.1.0a2` | Execution governance, policies, & confirmation |
+| **#004** | **`agnara-capability-basics`** | **`agnara==0.1.0a3`** | **Capability-first authoring, metadata, & compilation** |
 
 ---
 
-## Git & Development Workflow
+## 11. Frozen Status
 
-The repository follows a clean, professional GitFlow structure:
-- **`main`:** Contains strictly the historical, stable release baseline (`v0.1.0`). Direct commits are forbidden.
-- **`develop`:** Active development branch where changes, verification runs, and tests are validated.
-- **Pull Requests:** All feature or fix work targets `develop`. Milestone releases are promoted from `develop` into `main` via validated PRs.
-
----
-
-## Real Limitations of `agnara==0.1.0a3`
-
-To maintain historical accuracy, this reference application respects the real boundaries of the 0.1.0a3 release:
-1. **Core Kernel Only:** In `0.1.0a3`, Agnara is an execution kernel. Transport adapters (HTTP, REST, MCP server tools, CLI commands) are external projections and not part of the core package.
-2. **Authoring Surface Scope:** In `0.1.0a3`, `@app.capability` accepts metadata, but does not take policy rules or DI providers directly. Dependency injection is authored through `DIRegistry` (see Reference App #002) and policies via `ScopePolicy` (see Reference App #003).
-3. **No Coercion on Direct Calls:** Invoking capability functions directly relies on standard Python argument binding without transport-level string coercion.
+This repository is **Historical / Frozen**. It serves as an immutable pedagogical baseline for `agnara==0.1.0a3`. It does not accept upgrades to newer Agnara releases or unreleased development branches.
 
 ---
 
