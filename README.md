@@ -193,7 +193,7 @@ This repository belongs to the Agnara Historical Reference Application series:
 
 | App # | Designation | Pinned Release | Pedagogical Focus |
 |---|---|---|---|
-| **#001** | `agnara-starter` | `agnara==0.1.0a1` | Initial core setup & basic execution |
+| **#001** | `agnara-task-intelligence` | `agnara==0.1.0a2` | Task lifecycle, step execution, & orchestration |
 | **#002** | `agnara-dependency-intelligence` | `agnara==0.1.0a2` | Dependency injection & graph resolution |
 | **#003** | `agnara-secure-operations` | `agnara==0.1.0a2` | Execution governance, policies, & confirmation |
 | **#004** | **`agnara-capability-basics`** | **`agnara==0.1.0a3`** | **Capability-first authoring, metadata, & compilation** |
