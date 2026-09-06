@@ -19,3 +19,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Standalone interactive educational demonstration script in `app.py`.
 - Comprehensive unit test suite in `tests/` covering execution, metadata, compilation, and error handling.
 - Full architectural documentation in `ARCHITECTURE.md` and agent guidance in `AGENTS.md`.
+- Educational documentation in `docs/` (`capability-lifecycle.md`, `public-api-boundary.md`) and agent-first skills in `.agents/skills/` (`agnara-capabilities`, `documentation`, `testing`).
+- GitHub Actions continuous integration workflow and repository governance templates.
